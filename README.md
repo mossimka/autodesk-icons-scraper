@@ -34,6 +34,17 @@ npm install
 node crawler.js
 ```
 
+### 3. Convert icons to WebP (Optional)
+
+You can convert the downloaded PNG icons to WebP format with custom dimensions. This command will automatically try to install `webp` utilities if they are missing (supports macOS via Brew and Linux via APT).
+
+```bash
+# Usage: node convertToWebp.js <width> <height>
+node convertToWebp.js 128 128
+```
+
+The output will be saved in the `./icons_webp/` folder.
+
 ## Requirements
 
 - Node.js 16+
