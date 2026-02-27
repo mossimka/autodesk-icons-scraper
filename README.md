@@ -1,51 +1,73 @@
-# Autodesk Icons Scraper
+# Autodesk Icons Crawler
 
-A Node.js tool to crawl and download official Autodesk product icons directly from their website.
+A Node.js tool that crawls Autodesk product pages, downloads product icons, and optionally converts PNG files to WebP.
+
+## Project Structure
+
+```txt
+src/
+  config/
+    constants.js
+    products.js
+  crawler/
+    crawlProduct.js
+    downloadImage.js
+    extractIconUrl.js
+    fetchPage.js
+    index.js
+    validateProducts.js
+  image/
+    convertToWebp.js
+scripts/
+  crawl.js
+  convert-webp.js
+output/
+  icons/
+  icons_webp/
+  manifest.json
+```
 
 ## Features
 
-- Scrapes the latest product overview pages.
-- Automatically handles different page structures and lazy-loaded images.
-- Downloads icons in **SVG** or **PNG** format (depending on source availability).
-- Saves icons to `./icons/` folder using product slugs.
+- Modular crawler architecture (`config`, `crawler`, `image`).
+- Retry + timeout behavior for HTTP requests.
+- Product config validation before crawling.
+- Run manifest (`output/manifest.json`) with per-product status and errors.
+- Safe WebP conversion via `spawnSync` (no shell interpolation).
 
-## Supported Products
+## Requirements
 
-The crawler is pre-configured to fetch icons for:
+- Node.js 16+
+- `cwebp` binary available in `PATH` for WebP conversion
 
-- 3ds Max, Advance Steel, Alias, Arnold
-- AutoCAD (including Industry Toolsets)
-- Autodesk Build, Docs, Rendering, Takeoff, Tandem
-- BIM Collaborate Pro, Civil 3D
-- Fusion, Inventor, Maya, Moldflow, Navisworks
-- ReCap Pro, Revit, Robot Structural Analysis, Vault
-
-## Getting Started
-
-### 1. Install dependencies
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-### 2. Run the crawler
+## Usage
+
+Run crawler:
 
 ```bash
-node crawler.js
+npm run crawl
 ```
 
-### 3. Convert icons to WebP (Optional)
-
-You can convert the downloaded PNG icons to WebP format with custom dimensions. This command will automatically try to install `webp` utilities if they are missing (supports macOS via Brew and Linux via APT).
+Convert downloaded PNG icons to WebP:
 
 ```bash
-# Usage: node convertToWebp.js <width> <height>
-node convertToWebp.js 128 128
+# <width> <height> [quality]
+npm run convert:webp -- 128 128 80
 ```
 
-The output will be saved in the `./icons_webp/` folder.
+## Output
 
-## Requirements
+- Downloaded source icons: `output/icons/`
+- Converted icons: `output/icons_webp/`
+- Run summary: `output/manifest.json`
 
-- Node.js 16+
-- axios, cheerio, fs-extra
+## Legacy Commands (Still Supported)
+
+- `node crawler.js`
+- `node convertToWebp.js <width> <height> [quality]`
